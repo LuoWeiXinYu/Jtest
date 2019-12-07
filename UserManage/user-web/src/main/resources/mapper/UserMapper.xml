@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hunau.dao.UserDao" >
+
+    <resultMap id="BaseResultMap" type="com.hunau.entity.User" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="pwd" property="pwd" jdbcType="VARCHAR" />
+        <result column="sexy" property="sexy" jdbcType="VARCHAR" />
+        <result column="birthday" property="birthday" jdbcType="DATE" />
+        <result column="age" property="age" jdbcType="INTEGER" />
+        <result column="isuse" property="remark" jdbcType="BOOLEAN" />
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+        id,name,pwd,sexy,birthday,YEAR(now())-YEAR(BIRTHDAY) AS age,isuse</sql>
+
+    <!--用户登录验证-->
+    <select id="userlogin" parameterType="com.hunau.entity.User" resultType="com.hunau.entity.User">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM tb_user WHERE name = #{name} AND pwd = #{pwd} and isuse!=0
+    </select>
+
+    <!--新用户注册  方式1-->
+    <insert id="adduser" parameterType="com.hunau.entity.User" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO tb_user (name,pwd,sexy,birthday) VALUES (#{name},#{pwd},#{sexy},#{birthday})
+    </insert>
+
+    <!--新用户注册  方式2-->
+    <insert id="adduser1" parameterType="com.hunau.entity.User">
+        INSERT INTO tb_user (name,pwd,sexy,birthday) VALUES (#{name},#{pwd},#{sexy},#{birthday})
+    </insert>
+    <!-- 更新用户 -->
+    <update id="updateuser" parameterType="com.hunau.entity.User">
+        UPDATE tb_user set name=#{name},pwd=#{pwd},sexy=#{sexy},birthday=#{birthday} where id=#{id}
+    </update>
+
+    <!-- 根据id删除用户-->
+    <delete id="deluserid" parameterType="Long">
+        delete from tb_user where id=#{id}
+    </delete>
+
+    <!-- 根据name删除用户-->
+    <delete id="delusername" parameterType="String">
+        delete from tb_user where name like CONCAT('%',#{name},'%')
+    </delete>
+
+    <select id="queryAllUser" resultType="map">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM tb_user where isuse!=0
+    </select>
+
+    <select id="queryUserById" resultType="map" parameterType="LONG">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM tb_user where id=#{id} and isuse!=0
+    </select>
+
+    <select id="queryUserByName" resultType="map" parameterType="STRING">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM tb_user where name like CONCAT('%',#{name},'%')and isuse!=0
+    </select>
+</mapper>

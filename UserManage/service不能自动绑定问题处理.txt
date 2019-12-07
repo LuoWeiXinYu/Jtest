@@ -1,0 +1,5 @@
+web模块绑定service报错处理
+inspection info:checks autowiring problems in a bean class
+
+解决方法：降低警告级别
+settingd->editor->code style->inspections->spring->spring core->code->autowiring for bean class->选择warning

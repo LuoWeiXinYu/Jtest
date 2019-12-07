@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleleaf.org">
+<head>
+    <title>显示所有用户</title>
+    <link th:href="@{/test.css}" rel="stylesheet"/>
+</head>
+<body>
+<h1 align="center">多值显示结果</h1>
+<table align="center">
+    <thead>
+    <tr>
+        <th>序号</th>
+        <th>姓名</th>
+        <th>密码</th>
+        <th>性别</th>
+        <th>出生年月</th>
+        <th>年龄</th>
+        <th>是否有效</th>
+    </tr>
+    </thead>
+    <tbody th:each="i:${users}">
+    <tr >
+        <td th:text="${i.id}"></td>
+        <td th:text="${i.name}"></td>
+        <td th:text="${i.pwd}"></td>
+        <td th:text="${i.sexy}"></td>
+        <td th:text=${#dates.format(i.birthday,'yyyy年MM月dd日')}></td>
+        <td th:text="${i.age}"></td>
+        <td th:text="${i.isuse==0?'否':'是'}"></td>
+    </tr>
+    </tbody>
+
+    <div align="center">
+        <form action="/user/uupdate" method="post">
+            用户id:<input type="text" name="id" /></br>
+            用户名:<input type="text" name="name" /></br>
+            密码:<input type="password" name="pwd" /></br>
+            性别:<input type="radio" value="男" name="sexy" checked="true"/>男<input type="radio" value="女" name="sexy"/>女</br>
+            出生：<input id="birthday" type="date" value="2019-11-01" name="birthday" /></br>
+            <input type="submit" value="更改">
+        </form>
+    </div>
+
+</table>
+</body>
+</html>
