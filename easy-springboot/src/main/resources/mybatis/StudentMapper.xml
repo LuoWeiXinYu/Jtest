@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 配置命名空间，区别名称 -->
+<mapper namespace="xiao.ze.demo.mapper.StudentMapper">
+
+    <resultMap id="BaseResultMap" type="xiao.ze.demo.entity.User" >
+        <id column="sid" property="sid" jdbcType="INTEGER" />
+        <result column="sname" property="sname" jdbcType="VARCHAR" />
+        <result column="sexy" property="sexy" jdbcType="VARCHAR" />
+        <result column="sidcard" property="sidcard" jdbcType="VARCHAR" />
+        <result column="stel" property="stel" jdbcType="VARCHAR" />
+        <result column="swechat" property="swechat" jdbcType="VARCHAR" />
+        <result column="sqq" property="sqq" jdbcType="VARCHAR" />
+        <result column="saddress" property="saddress" jdbcType="VARCHAR" />
+        <result column="sparent" property="sparent" jdbcType="VARCHAR" />
+        <result column="sptel" property="sptel" jdbcType="VARCHAR" />
+        <result column="gradtime" property="gradtime" jdbcType="DATE" />
+        <result column="remark" property="remark" jdbcType="BOOLEAN" />
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+        sid,sname,sexy,sidcard,stel,swechat,sqq,saddress,sparent,sptel,gradtime,remark</sql>
+
+    <select id="queryAllStudent" resultType="map">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM tb_stu where remark!=0
+    </select>
+
+</mapper>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns="http://www.w3.org/1999/xhtml"  xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>学生管理</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
+</head>
+<body style="padding:8px;">
+<h3 class="title">学生管理</h3>
+<form action="" method="POST">
+    <input type="hidden" name="_method" value="DELETE"/>
+</form>
+<table border="0" cellspacing="0">
+    <thead>
+    <tr>
+        <th>编号</th>
+        <th>姓名</th>
+        <th>性别</th>
+        <th>身份证号码</th>
+        <th>电话号码</th>
+        <th>微信</th>
+        <th>QQ</th>
+        <th>家庭住址</th>
+        <th>父母姓名</th>
+        <th>父母电话</th>
+        <th>毕业日期</th>
+    </tr>
+    </thead>
+    <tbody th:each="i:${student}">
+    <tr >
+        <td th:text="${i.sid}"></td>
+        <td th:text="${i.sname}"></td>
+        <td th:text="${i.sexy}"></td>
+        <td th:text="${i.sidcard}"></td>
+        <td th:text="${i.stel}"></td>
+        <td th:text="${i.swechat}"></td>
+        <td th:text="${i.sqq}"></td>
+        <td th:text="${i.saddress}"></td>
+        <td th:text="${i.sparent}"></td>
+        <td th:text="${i.sptel}"></td>
+        <td th:text=${#dates.format(i.birthday,'yyyy年MM月dd日')}></td>
+    </tr>
+    </tbody>
+
+</table>
+
+</div>
+</body>
+</html>

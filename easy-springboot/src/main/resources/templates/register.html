@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>用户注册</title>
+    <link th:href="@{/test.css}" rel="stylesheet"/>
+</head>
+<body>
+<p align="center">用户注册</p>
+<div align="center">
+    <form action="/security/uregister" method="post">
+        用户账号：<input type="text" name="uid" /></br>
+        用户名:<input type="text" name="uname" /></br>
+        密码:<input type="password" name="pwd" /></br>
+        确认密码:<input type="password" name="pwd2" /></br>
+        <input type="submit" value="注册">
+    </form>
+</div>
+</body>
+</html>

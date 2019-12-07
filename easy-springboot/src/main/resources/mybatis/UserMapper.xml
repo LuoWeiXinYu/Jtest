@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 配置命名空间，区别名称 -->
+<mapper namespace="xiao.ze.demo.mapper.UserMapper">
+
+    <resultMap id="BaseResultMap" type="xiao.ze.demo.entity.User" >
+        <id column="uid" property="id" jdbcType="INTEGER" />
+        <result column="uname" property="name" jdbcType="VARCHAR" />
+        <result column="pwd" property="pwd" jdbcType="VARCHAR" />
+        <result column="creadate" property="creadate" jdbcType="DATE" />
+        <result column="remark" property="remark" jdbcType="BOOLEAN" />
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+        uid,uname,pwd,creadate,remark</sql>
+
+    <!--用户登录验证-->
+    <select id="get" parameterType="xiao.ze.demo.entity.User" resultType="xiao.ze.demo.entity.User">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM tb_user WHERE uname = #{uname} AND pwd = #{pwd} and remark!=0
+    </select>
+
+    <!--新用户注册  方式-->
+    <insert id="adduser" parameterType="xiao.ze.demo.entity.User" useGeneratedKeys="true">
+        INSERT INTO tb_user (uid,uname,pwd) VALUES (#{uid},#{uname},#{pwd})
+    </insert>
+
+</mapper>

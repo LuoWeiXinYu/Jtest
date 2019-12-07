@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 配置命名空间，区别名称 -->
+<mapper namespace="xiao.ze.demo.mapper.CourseMapper">
+
+    <!-- SQL片段 -->
+    <sql id="cols">
+        cid,
+        cname,
+        ctime,
+        tid,
+        cstatus,
+        cterm,
+        cpoint,
+        cdemo,
+        cpic
+    </sql>
+
+    <!-- 中间，对象的属性和结果集的字段之间的对应关系 -->
+    <resultMap type="xiao.ze.demo.entity.Course" id="courseRM">
+        <!-- 主键映射 -->
+        <id property="courseNo" column="cid"/>
+
+        <!-- 普通字段 property指实体的属性；column结果集的字段名称 -->
+        <result property="courseName" column="cname"/>
+        <result property="courseHours" column="ctime"/>
+        <result property="courseStatus" column="cstatus"/>
+        <result property="reqs" column="cterm"/>
+        <result property="coursePoint" column="cpoint"/>
+        <result property="courseMemo" column="cdemo"/>
+        <result property="courseTextbookPic" column="cpic"/>
+
+
+        <!-- 对象关联 -->
+        <!-- 对一关系 -->
+        <association property="courseType" javaType="xiao.ze.demo.entity.CourseType">
+            <!-- 主键映射 -->
+            <id property="typeId" column="tid"/>
+
+            <!-- 普通字段 property指实体的属性；column结果集的字段名称 -->
+            <result property="typeName" column="tname"/>
+        </association>
+
+    </resultMap>
+
+    <!-- 新增 -->
+    <insert id="addCourse" parameterType="xiao.ze.demo.entity.Course">
+        insert into tb_course
+        (<include refid="cols"/>)
+        values
+        (#{courseNo},#{courseName},#{courseHours},
+        #{courseType.typeId},#{courseStatus},#{reqs},
+        #{coursePoint},#{courseMemo},#{courseTextbookPic,jdbcType=BLOB})
+    </insert>
+
+    <!-- 根据主键删除一条 -->
+    <delete id="removeCourseByNo" parameterType="string">
+        delete from tb_course
+        where cid = #{courseNo}
+    </delete>
+
+    <!-- 根据typeId删除多条 -->
+    <delete id="removeCourseByTypeId" parameterType="int">
+        delete from tb_course
+        where tid = #{typeId}
+    </delete>
+
+    <!-- 修改 -->
+    <update id="updateCourse" parameterType="xiao.ze.demo.entity.Course" >
+        update tb_course
+        <set>
+            <if test="courseName!=null">cname=#{courseName},</if>
+            <if test="courseHours!=null">ctime=#{courseHours},</if>
+            <if test="courseType!=null">tid=#{courseType.typeId},</if>
+            <if test="courseStatus!=null">cstatus=#{courseStatus},</if>
+            <if test="reqs!=null">cterm=#{reqs},</if>
+            <if test="coursePoint!=null">cpoint=#{coursePoint},</if>
+            <if test="courseMemo!=null">cdemo=#{courseMemo},</if>
+            <if test="courseTextbookPic!=null">cpic=#{courseTextbookPic,jdbcType=BLOB},</if>
+        </set>
+        where cid = #{courseNo}
+    </update>
+
+    <!-- 查询一个，按主键查询 -->
+    <select id="loadCourseByNo" parameterType="string" resultType="xiao.ze.demo.entity.Course" resultMap="courseRM">
+        select
+        p.cid,p.cname,p.ctime,p.cstatus,
+        p.cterm,p.cpoint,p.cdemo,p.cpic,b.type_id,b.tname
+        from tb_course p
+        left join tb_type b
+        on p.tid=b.tid
+        where p.cid= #{courseNo}
+    </select>
+
+    <!-- 根据typeId查询 -->
+    <select id="loadCourseByTypeId" parameterType="int" resultType="string">
+        select cid from tb_course
+        where tid= #{typeId}
+    </select>
+
+    <!-- 带分页查询，注意Mybatis中如果有填写集合类型，只填写集合中元素的类型  -->
+    <select id="loadScopedCourses" parameterType="map" resultType="xiao.ze.demo.entity.Course" resultMap="courseRM">
+        select * from tb_course p
+        left join tb_type b
+        on p.tid=b.tid
+        <where>
+            1=1
+            <if test="qryCourseName!=null">and p.cname like concat(concat('%', #{qryCourseName}), '%')</if>
+            <if test="qryStartPoint!=null">and p.cpoint >= #{qryStartPoint}</if>
+            <if test="qryEndPoint!=null">and p.cpoint <![CDATA[ <= ]]> #{qryEndPoint}</if>
+            <if test="typeId!=null">and p.tid = #{typeId}</if>
+        </where>
+        order by p.cid
+    </select>
+
+</mapper>
